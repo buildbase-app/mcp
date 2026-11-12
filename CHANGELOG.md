@@ -7,6 +7,15 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 The version here is the version of the listing. It matches `server.json` and
 every plugin manifest.
 
+## [Unreleased]
+
+### Fixed
+
+- `scripts/check.mjs` warns instead of failing when claude.ai refuses an
+  automated request (401, 403 or 429). claude.ai blocks requests from CI
+  servers, but the link works in a browser. Every other link still fails on
+  any error.
+
 ## [1.0.0] - 2026-11-12
 
 ### Added

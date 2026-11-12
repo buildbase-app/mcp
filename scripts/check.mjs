@@ -16,6 +16,12 @@ const NAME_RE = /^[a-zA-Z0-9.-]+\/[a-zA-Z0-9._-]+$/;
 const MAX_BYTES = 1024 * 1024;
 const TIMEOUT_MS = 10_000;
 const USER_AGENT = 'buildbase-mcp-repo-check (+https://github.com/buildbase-app/mcp)';
+// Hosts that refuse automated requests from CI servers (401, 403 or 429) but
+// load in a person's browser. A refusal from one of these is a warning; any
+// other status, and every other host, still fails. Add a host only after
+// opening the link in a browser.
+const BOT_WALLED_HOSTS = ['claude.ai'];
+const BOT_WALL_STATUSES = [401, 403, 429];
 
 // Plugin manifests and where each keeps its version.
 const MANIFESTS = [
@@ -357,9 +363,10 @@ async function linkStatus(url) {
   try {
     const status = await withRetry(once);
     if (status < 400) return null;
-    return `HTTP ${status}`;
+    const walled = BOT_WALLED_HOSTS.includes(new URL(url).hostname) && BOT_WALL_STATUSES.includes(status);
+    return { problem: `HTTP ${status}`, warnOnly: walled };
   } catch (err) {
-    return err.name === 'TimeoutError' ? 'timed out' : err.message;
+    return { problem: err.name === 'TimeoutError' ? 'timed out' : err.message, warnOnly: false };
   }
 }
 
@@ -369,16 +376,20 @@ async function linkStatus(url) {
     for (const u of markdownLinks(read(f))) where.set(u, [...(where.get(u) ?? []), f]);
   const urls = [...where.keys()];
   const broken = [];
+  const walled = [];
   const queue = [...urls];
   await Promise.all(
     Array.from({ length: 6 }, async () => {
       while (queue.length) {
         const url = queue.shift();
-        const problem = await linkStatus(url);
-        if (problem) broken.push(`${url} (${problem}, in ${where.get(url).join(', ')})`);
+        const result = await linkStatus(url);
+        if (!result) continue;
+        const line = `${url} (${result.problem}, in ${where.get(url).join(', ')})`;
+        (result.warnOnly ? walled : broken).push(line);
       }
     }),
   );
+  for (const line of walled.sort()) warn('7. Link refuses automated requests (check it in a browser)', line);
   if (broken.length) fail('7. Markdown links resolve', broken.sort().join('; '));
   else pass('7. Markdown links resolve', `${urls.length} links`);
 }
