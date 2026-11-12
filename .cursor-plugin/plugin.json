@@ -1,0 +1,13 @@
+{
+  "name": "buildbase",
+  "version": "1.0.0",
+  "description": "Manage BuildBase organizations, members, content, email, workflows and settings as yourself.",
+  "author": {
+    "name": "Jagodana LLC"
+  },
+  "homepage": "https://docs.buildbase.app/console/ai-agents",
+  "repository": "https://github.com/buildbase-app/mcp",
+  "license": "MIT",
+  "keywords": ["buildbase", "mcp", "saas", "console"],
+  "logo": "assets/logo-512.png"
+}

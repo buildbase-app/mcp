@@ -1,0 +1,29 @@
+{
+  "name": "buildbase",
+  "version": "1.0.0",
+  "description": "Manage BuildBase organizations, members, content, email, workflows and settings as yourself.",
+  "author": {
+    "name": "Jagodana LLC",
+    "url": "https://www.buildbase.app"
+  },
+  "homepage": "https://docs.buildbase.app/console/ai-agents",
+  "repository": "https://github.com/buildbase-app/mcp",
+  "license": "MIT",
+  "keywords": ["buildbase", "mcp", "saas", "console"],
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "BuildBase",
+    "shortDescription": "Work in the BuildBase console",
+    "longDescription": "Work in the BuildBase console as yourself: read and change your organizations, members, content, email, workflows and settings, and set an organization up from a blueprint, within your role and what each organization allows AI agents to do.",
+    "developerName": "Jagodana LLC",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://www.buildbase.app",
+    "supportURL": "https://www.buildbase.app/contact",
+    "privacyPolicyURL": "https://www.buildbase.app/legal/privacy",
+    "termsOfServiceURL": "https://www.buildbase.app/legal/terms",
+    "defaultPrompt": ["List my BuildBase organizations."],
+    "composerIcon": "./assets/logo-400.png",
+    "logo": "./assets/logo-512.png"
+  }
+}

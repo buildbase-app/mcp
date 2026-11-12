@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "buildbase": {
+      "url": "https://api.console.buildbase.app/mcp"
+    }
+  }
+}

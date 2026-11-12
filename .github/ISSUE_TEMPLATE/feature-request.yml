@@ -1,0 +1,25 @@
+name: Feature request
+description: Something you want an AI agent to be able to do in BuildBase.
+title: "Feature request: "
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What do you want the agent to do?
+      description: Describe the task in your own words. An example prompt helps.
+    validations:
+      required: true
+  - type: input
+    id: client
+    attributes:
+      label: Which client?
+      placeholder: Claude Code, Cursor, VS Code, ...
+    validations:
+      required: true
+  - type: checkboxes
+    id: no-secrets
+    attributes:
+      label: Secrets
+      options:
+        - label: I have not pasted any token or secret in this issue.
+          required: true

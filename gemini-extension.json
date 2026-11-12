@@ -1,0 +1,10 @@
+{
+  "name": "buildbase",
+  "version": "1.0.0",
+  "description": "Manage BuildBase organizations, members, content, email, workflows and settings as yourself.",
+  "mcpServers": {
+    "buildbase": {
+      "httpUrl": "https://api.console.buildbase.app/mcp"
+    }
+  }
+}

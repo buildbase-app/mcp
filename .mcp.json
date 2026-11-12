@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "buildbase": {
+      "type": "http",
+      "url": "https://api.console.buildbase.app/mcp"
+    }
+  }
+}

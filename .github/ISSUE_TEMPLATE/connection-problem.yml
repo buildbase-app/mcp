@@ -1,0 +1,57 @@
+name: Connection problem
+description: Your AI client cannot connect to the BuildBase MCP server, or sign-in fails.
+title: "Connection problem: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting this. Please do not paste access tokens, passwords,
+        cookies or authorization codes. For a security problem, follow
+        SECURITY.md instead of opening an issue.
+  - type: input
+    id: client
+    attributes:
+      label: Client
+      description: Which AI client are you using?
+      placeholder: Claude Code, Cursor, VS Code, ...
+    validations:
+      required: true
+  - type: input
+    id: client-version
+    attributes:
+      label: Client version
+      placeholder: "1.2.3"
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: error
+    attributes:
+      label: Error text
+      description: Copy the exact error message. Remove any token or secret first.
+      render: text
+  - type: dropdown
+    id: agent-access
+    attributes:
+      label: Agent access for the organization
+      description: Owners and admins set this in Console > Account > Security.
+      options:
+        - Read only
+        - Read and write
+        - "Off"
+        - I don't know
+    validations:
+      required: true
+  - type: checkboxes
+    id: no-secrets
+    attributes:
+      label: Secrets
+      options:
+        - label: I have not pasted any token or secret in this issue.
+          required: true

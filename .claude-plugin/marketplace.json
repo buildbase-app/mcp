@@ -1,0 +1,16 @@
+{
+  "name": "buildbase",
+  "description": "Connect Claude Code to BuildBase with its hosted MCP server.",
+  "version": "1.0.0",
+  "owner": {
+    "name": "Jagodana LLC",
+    "url": "https://www.buildbase.app"
+  },
+  "plugins": [
+    {
+      "name": "buildbase",
+      "source": "./",
+      "description": "Manage BuildBase organizations, members, content, email, workflows and settings as yourself."
+    }
+  ]
+}

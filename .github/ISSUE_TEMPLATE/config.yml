@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: BuildBase support
+    url: https://www.buildbase.app/contact
+    about: Questions about your account or the BuildBase console. You can also email support@buildbase.app.
+  - name: Report a security vulnerability
+    url: https://github.com/buildbase-app/mcp/blob/main/SECURITY.md
+    about: Please do not open a public issue. Follow the security policy instead.
