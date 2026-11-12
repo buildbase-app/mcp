@@ -361,7 +361,12 @@ async function linkStatus(url) {
     return res.status;
   };
   try {
-    const status = await withRetry(once);
+    let status = await withRetry(once);
+    // A server error or rate limit is often brief: try once more before failing.
+    if (status >= 500 || status === 429) {
+      await new Promise((r) => setTimeout(r, 3000));
+      status = await withRetry(once);
+    }
     if (status < 400) return null;
     const walled = BOT_WALLED_HOSTS.includes(new URL(url).hostname) && BOT_WALL_STATUSES.includes(status);
     return { problem: `HTTP ${status}`, warnOnly: walled };
@@ -392,6 +397,30 @@ async function linkStatus(url) {
   for (const line of walled.sort()) warn('7. Link refuses automated requests (check it in a browser)', line);
   if (broken.length) fail('7. Markdown links resolve', broken.sort().join('; '));
   else pass('7. Markdown links resolve', `${urls.length} links`);
+}
+
+// ---------------------------------------------------------------- 7b. relative links
+
+// Links to files in this repository (README to a client guide, and so on)
+// must point at a file or folder that exists.
+{
+  const missing = [];
+  let count = 0;
+  for (const f of markdownFiles) {
+    const prose = read(f)
+      .replace(/```[\s\S]*?```/g, '')
+      .replace(/`[^`\n]*`/g, '');
+    for (const m of prose.matchAll(/\]\(([^)\s]+)\)/g)) {
+      const target = m[1];
+      if (/^[a-z][a-z0-9+.-]*:/i.test(target) || target.startsWith('#')) continue;
+      const path = target.split('#')[0].split('?')[0];
+      if (!path) continue;
+      count += 1;
+      if (!existsSync(join(ROOT, dirname(f), path))) missing.push(`${f} links to ${target}`);
+    }
+  }
+  if (missing.length) fail('7b. Relative links resolve', missing.join('; '));
+  else pass('7b. Relative links resolve', `${count} links`);
 }
 
 // ---------------------------------------------------------------- 8. no long dashes

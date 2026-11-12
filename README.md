@@ -113,6 +113,9 @@ issue. Never paste a token or password.
 - Terms: [www.buildbase.app/legal/terms](https://www.buildbase.app/legal/terms)
 - Support: support@buildbase.app or [www.buildbase.app/contact](https://www.buildbase.app/contact)
 - Security: [SECURITY.md](SECURITY.md)
+- Maintainers: [MAINTENANCE.md](MAINTENANCE.md) covers publishing to the MCP
+  Registry, the signing key, repository settings and setting up a repository
+  like this one from scratch.
 
 ## License
 
