@@ -225,7 +225,7 @@ delete the old record.
 
 | Marketplace | Listing URL | Date listed | Account used | Owner |
 | --- | --- | --- | --- | --- |
-| MCP Registry | not listed yet | | | |
+| MCP Registry | [app.buildbase/console](https://registry.modelcontextprotocol.io/v0.1/servers/app.buildbase%2Fconsole/versions/latest) | 2026-11-12 (version 1.0.0) | DNS sign-in for `buildbase.app` (key in the team password manager) | @dharmendra-buildbase |
 
 ## 10. Setting up a connector repository from scratch
 
