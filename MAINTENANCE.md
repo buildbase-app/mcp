@@ -79,8 +79,10 @@ change.
 - [ ] Re-read every source in section 2. Update any manifest or guide that
       moved, and the "Read" dates.
 - [ ] Triage open issues.
-- [ ] Check that the Glama, Smithery, mcpservers.org and MCP Market pages
-      still show the right name, description, endpoint and links.
+- [ ] Check that every live listing in section 9 still shows the right name,
+      description, endpoint and links.
+- [ ] Follow up on submissions still in review in section 9. When one goes
+      live, update its row. (Smithery closed to submissions on 2026-10-31.)
 
 ## 5. Quarterly
 
@@ -235,6 +237,17 @@ delete the old record.
 | Marketplace | Listing URL | Date listed | Account used | Owner |
 | --- | --- | --- | --- | --- |
 | MCP Registry | [app.buildbase/console](https://registry.modelcontextprotocol.io/v0.1/servers/app.buildbase%2Fconsole/versions/latest) | 2026-11-12 (version 1.0.0) | DNS sign-in for `buildbase.app` (key in the team password manager) | @dharmendra-buildbase |
+| Glama | [BuildBase Console connector](https://glama.ai/mcp/connectors/app.buildbase/console), imported from the MCP Registry. Not claimed yet: claim with a DNS TXT record at `_glama-claim.buildbase.app` | 2026-11-12 | Not claimed yet | @dharmendra-buildbase |
+| Cline marketplace | In review: [cline/mcp-marketplace#3719](https://github.com/cline/mcp-marketplace/issues/3719) | Submitted 2026-11-12 | GitHub @JagodanaDharmendra | @dharmendra-buildbase |
+| GitHub MCP Registry (VS Code) | Requested in [github/github-mcp-server discussion #1257](https://github.com/github/github-mcp-server/discussions/1257) and by email to GitHub partnerships. New versions sync from the MCP Registry once onboarded | Requested 2026-11-12 | GitHub comment and team email | @dharmendra-buildbase |
+| mcpservers.org | In review (free, up to 2 weeks). Submitted at `mcpservers.org/submit` as a remote server with OAuth | Submitted 2026-11-12 | Web form, team contact email | @dharmendra-buildbase |
+| MCP Market | In the free queue (4 to 6 weeks) for the GitHub repository. Submitted at `mcpmarket.com/submit` | Submitted 2026-11-12 | Web form, team contact email | @dharmendra-buildbase |
+
+Not submitted yet, with the drafts ready: Cursor Marketplace, Docker MCP
+Catalog and Raycast (each needs a sign-in test in that client first), and
+awesome-remote-mcp-servers (needs the Glama listing, which now exists).
+Nothing to submit for the Gemini CLI gallery: it finds the repository by its
+`gemini-cli-extension` topic.
 
 ## 10. Setting up a connector repository from scratch
 
