@@ -3,6 +3,7 @@
 Work in the BuildBase console as yourself: read and change your organizations, members, content, email, workflows and settings, and set an organization up from a blueprint, within your role and what each organization allows AI agents to do.
 
 [![check](https://github.com/buildbase-app/mcp/actions/workflows/check.yml/badge.svg)](https://github.com/buildbase-app/mcp/actions/workflows/check.yml)
+[![MCP Badge](https://lobehub.com/badge/mcp/buildbase-app-mcp)](https://lobehub.com/mcp/buildbase-app-mcp)
 
 ## Endpoint
 
