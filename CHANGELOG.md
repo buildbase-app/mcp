@@ -12,7 +12,8 @@ every plugin manifest.
 ### Added
 
 - `MAINTENANCE.md` section 9 records the directory submissions made on
-  2026-11-12 (Glama, Cline, GitHub MCP Registry, mcpservers.org, MCP Market)
+  2026-11-12 (Glama, LobeHub, Cline, GitHub MCP Registry, mcpservers.org,
+  MCP Market)
   and the ones still to do. The monthly check follows up on them.
 
 - `.github/dependabot.yml`: a monthly pull request that updates the pinned

@@ -238,6 +238,7 @@ delete the old record.
 | --- | --- | --- | --- | --- |
 | MCP Registry | [app.buildbase/console](https://registry.modelcontextprotocol.io/v0.1/servers/app.buildbase%2Fconsole/versions/latest) | 2026-11-12 (version 1.0.0) | DNS sign-in for `buildbase.app` (key in the team password manager) | @dharmendra-buildbase |
 | Glama | [BuildBase Console connector](https://glama.ai/mcp/connectors/app.buildbase/console), imported from the MCP Registry. Not claimed yet: claim with a DNS TXT record at `_glama-claim.buildbase.app` | 2026-11-12 | Not claimed yet | @dharmendra-buildbase |
+| LobeHub | [BuildBase MCP server](https://lobehub.com/mcp/buildbase-app-mcp). README shows its badge | 2026-11-12 | Added by @JagodanaDharmendra | @dharmendra-buildbase |
 | Cline marketplace | In review: [cline/mcp-marketplace#3719](https://github.com/cline/mcp-marketplace/issues/3719) | Submitted 2026-11-12 | GitHub @JagodanaDharmendra | @dharmendra-buildbase |
 | GitHub MCP Registry (VS Code) | Requested in [github/github-mcp-server discussion #1257](https://github.com/github/github-mcp-server/discussions/1257) and by email to GitHub partnerships. New versions sync from the MCP Registry once onboarded | Requested 2026-11-12 | GitHub comment and team email | @dharmendra-buildbase |
 | mcpservers.org | In review (free, up to 2 weeks). Submitted at `mcpservers.org/submit` as a remote server with OAuth | Submitted 2026-11-12 | Web form, team contact email | @dharmendra-buildbase |
