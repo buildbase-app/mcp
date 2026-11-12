@@ -44,8 +44,8 @@ Notes from the last read:
   `.cursor-plugin/plugin.json` leaves them out.
 - VS Code plans to remove the `.vscode/mcp.json` format in February 2027. The
   guide leads with the newer `mcpServers` format.
-- Tested on 2026-11-12 with Gemini CLI 0.66.0: `gemini extensions install
-  https://github.com/buildbase-app/mcp` installs the `buildbase` extension
+- Tested on 2026-11-12 with Gemini CLI 0.66.0: installing this repository
+  with `gemini extensions install` installs the `buildbase` extension
   (the folder takes the manifest name, not the repository name),
   `gemini extensions validate` passes, and `gemini mcp list` shows the server
   as `http` at the endpoint. Sign-in was not tested there, since it needs a
