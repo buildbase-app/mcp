@@ -28,6 +28,11 @@ every plugin manifest.
 - `MAINTENANCE.md` section 9 records the MCP Registry listing
   `app.buildbase/console` 1.0.0, published on 2026-11-12.
 
+### Changed
+
+- `MAINTENANCE.md` section 9: the Glama listing is claimed, verified by the
+  DNS TXT record at `_glama-claim.buildbase.app`.
+
 ### Fixed
 
 - `scripts/check.mjs` warns instead of failing when claude.ai refuses an
