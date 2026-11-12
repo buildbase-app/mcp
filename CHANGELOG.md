@@ -11,6 +11,11 @@ every plugin manifest.
 
 ### Added
 
+- `.github/dependabot.yml`: a monthly pull request that updates the pinned
+  GitHub Actions, offering only releases at least 14 days old.
+- `MAINTENANCE.md` records a real install of the Gemini CLI extension from
+  this repository.
+
 - `MAINTENANCE.md` section 6 is now the full MCP Registry runbook: creating
   the signing key and the DNS record, every publish, and the errors seen so
   far. New section 10 records how this repository was set up, as steps to

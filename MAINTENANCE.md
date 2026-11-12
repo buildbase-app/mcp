@@ -33,6 +33,7 @@ below. Re-read them monthly (section 4).
 | v0 | `docs/clients/v0.md` | [MCP Integrations](https://v0.app/docs/MCP) | 2026-11-12 | yes |
 | Raycast | `docs/clients/raycast.md` | [Model Context Protocol](https://manual.raycast.com/ai/model-context-protocol), [MCP Registry extension](https://www.raycast.com/raycast/model-context-protocol-registry) | 2026-11-12 | yes |
 | Any other client | `docs/clients/other.md` | [MCP authorization 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization) | 2026-11-12 | yes |
+| Dependabot | `.github/dependabot.yml` | [Dependabot options reference](https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference) | 2026-11-12 | yes |
 
 Notes from the last read:
 
@@ -43,8 +44,14 @@ Notes from the last read:
   `.cursor-plugin/plugin.json` leaves them out.
 - VS Code plans to remove the `.vscode/mcp.json` format in February 2027. The
   guide leads with the newer `mcpServers` format.
-- Not yet tested end to end: sign-in from v0, from the Cline editor extension,
-  and installing the Gemini CLI extension from this repository.
+- Tested on 2026-11-12 with Gemini CLI 0.66.0: installing this repository
+  with `gemini extensions install` installs the `buildbase` extension
+  (the folder takes the manifest name, not the repository name),
+  `gemini extensions validate` passes, and `gemini mcp list` shows the server
+  as `http` at the endpoint. Sign-in was not tested there, since it needs a
+  browser.
+- Not yet tested end to end: sign-in from v0 and from the Cline editor
+  extension.
 
 ## 3. When the server changes
 
@@ -67,6 +74,8 @@ change.
 
 ## 4. Monthly
 
+- [ ] Review the monthly Dependabot pull request for GitHub Actions. Check
+      each action's release notes, then merge it once `check` passes.
 - [ ] Re-read every source in section 2. Update any manifest or guide that
       moved, and the "Read" dates.
 - [ ] Triage open issues.
