@@ -11,9 +11,11 @@ on:
 permissions:
   contents: read
 
+# Only pull request runs cancel each other. A push to main must never cancel
+# the daily run, or a drift failure would go unreported.
 concurrency:
-  group: check-${{ github.ref }}
-  cancel-in-progress: true
+  group: check-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   check:

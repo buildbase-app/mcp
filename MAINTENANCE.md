@@ -79,31 +79,139 @@ change.
       Ask them to fix or merge.
 - [ ] Check that every claim in `README.md` still matches the live server.
 
-## 6. Republishing to the MCP Registry
+## 6. Publishing to the MCP Registry
 
-Published versions cannot be edited or deleted. Always bump the version first.
+The registry entry is `app.buildbase/console`. Published versions cannot be
+edited or deleted, so every publish needs a new version (section 3).
 
-Run this outside every repository, in `~/buildbase-mcp-registry`, where
-`key.pem` lives. The key is also in the team password manager. Never print it,
-commit it or paste it anywhere.
+### The signing key
 
-1. Copy `server.json` from this repository into that folder.
-2. Check it: `mcp-publisher validate server.json` (if your version has it).
-3. Sign in with the DNS key and publish:
+- The private key is `~/buildbase-mcp-registry/key.pem` on the owner's
+  machine, outside every repository, with a copy in the team password
+  manager. Never print it, commit it, or paste it into a chat, issue or CI log.
+- Its public key is a TXT record on the apex `buildbase.app`, added on
+  2026-11-12:
+  `v=MCPv1; k=ed25519; p=gps6CZWOmwm1AxU6R+JLBg0i3oLR66QLFbInvp1t9GY=`
+  If that record is removed, sign-in to the registry fails until it is back.
+- The key proves control of `buildbase.app`, so it can publish any name under
+  `app.buildbase/*`. Another BuildBase MCP server reuses the same key and
+  record: no new key, no new DNS record.
+
+### First time only: create the key and the DNS record
+
+Already done for `buildbase.app`. Repeat this only for a new domain, or to
+replace a lost or leaked key.
+
+1. Install the publisher:
 
    ```bash
-   PRIVATE_KEY="$(openssl pkey -in key.pem -noout -text | grep -A3 priv: | tail -n +2 | tr -d ' :\n')"
-   mcp-publisher login dns --domain buildbase.app --private-key "$PRIVATE_KEY"
-   unset PRIVATE_KEY
+   brew install mcp-publisher
+   ```
+
+   Without Homebrew, follow the install steps in the
+   [registry quickstart](https://modelcontextprotocol.io/registry/quickstart).
+2. Make a folder outside every repository:
+
+   ```bash
+   mkdir -p ~/buildbase-mcp-registry && cd ~/buildbase-mcp-registry
+   ```
+
+3. Check OpenSSL. `openssl version` must say OpenSSL 3, not LibreSSL. On a Mac
+   that says LibreSSL, run `brew install openssl@3` and use
+   `$(brew --prefix openssl@3)/bin/openssl` wherever these steps say `openssl`.
+4. Generate the key and lock down its permissions:
+
+   ```bash
+   openssl genpkey -algorithm Ed25519 -out key.pem && chmod 600 key.pem
+   ```
+
+5. Print the DNS value. This prints only the public key:
+
+   ```bash
+   echo "v=MCPv1; k=ed25519; p=$(openssl pkey -in key.pem -pubout -outform DER | tail -c 32 | base64)"
+   ```
+
+6. In Cloudflare, open `buildbase.app`, then **DNS > Records > Add record**:
+
+   | Field | Value |
+   | --- | --- |
+   | Type | `TXT` |
+   | Name | `@` |
+   | Content | the line printed in step 5 |
+   | TTL | Auto |
+
+   Add a new record. Keep the existing TXT records (SPF, Zoho and Google
+   verification).
+7. Save `key.pem` in the team password manager.
+8. Wait for the record to appear. Cloudflare's resolver shows it within a
+   minute; Google's can take 5 to 10 minutes.
+
+   ```bash
+   dig +short TXT buildbase.app
+   ```
+
+   Without `dig`:
+
+   ```bash
+   curl -s -H 'accept: application/dns-json' 'https://cloudflare-dns.com/dns-query?name=buildbase.app&type=TXT'
+   ```
+
+To replace a key: generate a new one, add its record, publish with it, then
+delete the old record.
+
+### Every publish
+
+1. Go to the key folder and download `server.json` from `main`:
+
+   ```bash
+   cd ~/buildbase-mcp-registry && curl -sSLo server.json https://raw.githubusercontent.com/buildbase-app/mcp/main/server.json && cat server.json
+   ```
+
+   Check the name, version and endpoint.
+2. Validate it, if your `mcp-publisher` has the command:
+
+   ```bash
+   mcp-publisher validate server.json
+   ```
+
+3. Read the private key out of `key.pem`. This prints only its length, which
+   must be 64:
+
+   ```bash
+   PRIVATE_KEY="$(openssl pkey -in key.pem -noout -text | awk '/^priv:/{f=1;next} /^pub:/{f=0} f' | tr -d ' :\n')"; echo "length: ${#PRIVATE_KEY}"
+   ```
+
+4. Sign in with the DNS key, and clear the variable:
+
+   ```bash
+   mcp-publisher login dns --domain buildbase.app --private-key "$PRIVATE_KEY"; unset PRIVATE_KEY
+   ```
+
+   It should end with "Successfully logged in". A DNS or verification error
+   here means the record is not visible yet: wait 5 minutes and repeat steps 3
+   and 4.
+5. Publish. This is the step that cannot be undone:
+
+   ```bash
    mcp-publisher publish
    ```
 
-4. Verify:
-   `curl -s "https://registry.modelcontextprotocol.io/v0.1/servers?search=app.buildbase/console&version=latest"`
+   If it fails with a network error, nothing was published: run it again. If
+   the login has expired by then, repeat steps 3 and 4 first.
+6. Verify:
 
-The DNS record is a TXT record on the apex `buildbase.app`:
-`v=MCPv1; k=ed25519; p=<public key>`. If it is removed, sign-in to the
-registry fails until it is added back.
+   ```bash
+   curl -s "https://registry.modelcontextprotocol.io/v0.1/servers?search=app.buildbase/console&version=latest"
+   ```
+
+7. Record the listing in section 9 through a pull request.
+
+### Errors we have seen
+
+| Error | Cause | Fix |
+| --- | --- | --- |
+| `invalid hex private key format: encoding/hex: invalid byte: U+0070 'p'` | The key was read with an older `grep -A3` command that also picked up the `pub:` line | Use the `awk` command in step 3 and check the length is 64 |
+| `TLS handshake timeout` on publish | A network problem on the way to the registry. Nothing was published | Run `mcp-publisher publish` again, on another network if it repeats |
 
 ## 7. Security reports
 
@@ -127,3 +235,121 @@ registry fails until it is added back.
 | Marketplace | Listing URL | Date listed | Account used | Owner |
 | --- | --- | --- | --- | --- |
 | MCP Registry | not listed yet | | | |
+
+## 10. Setting up a connector repository from scratch
+
+How this repository was set up, as steps to repeat for another BuildBase MCP
+server, or to rebuild this one. Replace `buildbase-app/mcp`, the endpoint and
+the names with the new ones.
+
+### Create the repository
+
+1. Create it public and empty (no README, license or `.gitignore`, so the
+   first commit is yours):
+
+   ```bash
+   gh repo create buildbase-app/mcp --public --description "Connect AI agents to BuildBase with its hosted MCP server" --homepage https://docs.buildbase.app/console/ai-agents
+   ```
+
+2. Copy this repository's files into it and change, everywhere they appear:
+   - the endpoint, and `ENDPOINT`, `HOST` and `TITLE` in `scripts/check.mjs`;
+   - `name`, `title` and `description` in `server.json`;
+   - the plugin names and descriptions in every manifest;
+   - `README.md`, the client guides, `llms-install.md`, `CHANGELOG.md`,
+     `.github/CODEOWNERS` and section 1 of this file.
+3. Re-read the format sources in section 2 before you trust any manifest
+   shape. They change often.
+4. Check everything:
+
+   ```bash
+   node scripts/check.mjs
+   ```
+
+   ```bash
+   claude plugin validate . --strict
+   ```
+
+5. Commit as yourself with GitHub's private noreply address, so your email
+   stays out of the public history. Find your ID with
+   `gh api user --jq .id`:
+
+   ```bash
+   git config user.name "<your GitHub login>"
+   git config user.email "<id>+<login>@users.noreply.github.com"
+   ```
+
+6. Make the first commit on `main` and push it. Every later change goes
+   through a branch and a pull request.
+
+### Repository settings
+
+Run these as an owner or admin of the organization:
+
+```bash
+gh repo edit buildbase-app/mcp --visibility public --accept-visibility-change-consequences --description "Connect AI agents to BuildBase with its hosted MCP server" --homepage https://docs.buildbase.app/console/ai-agents --add-topic mcp,mcp-server,model-context-protocol,remote-mcp,claude-code-plugin,cursor-plugin,codex-plugin,gemini-cli-extension,buildbase,saas --enable-wiki=false --enable-projects=false --enable-issues=true
+```
+
+```bash
+gh api -X PATCH repos/buildbase-app/mcp -f 'security_and_analysis[secret_scanning][status]=enabled' -f 'security_and_analysis[secret_scanning_push_protection][status]=enabled'
+```
+
+```bash
+gh api -X PUT repos/buildbase-app/mcp/private-vulnerability-reporting
+```
+
+```bash
+gh api -X PUT repos/buildbase-app/mcp/vulnerability-alerts
+```
+
+The `gemini-cli-extension` topic is what lists the repository in the
+[Gemini CLI gallery](https://geminicli.com/extensions), within a day.
+Topics should describe the repository truthfully: no topic that claims a
+store listing the repository does not have.
+
+In **Settings > Actions > General**:
+
+- Fork pull request workflows from outside collaborators: **Require approval
+  for first-time contributors** (or stricter).
+- Workflow permissions: **Read repository contents and packages permissions**.
+- Untick **Allow GitHub Actions to create and approve pull requests**.
+
+### Protect `main`, after CI is green
+
+Turn this on only once `check` passes on `main`. Before that it would block
+the pull request that fixes it.
+
+In **Settings > Rules > Rulesets > New ruleset > New branch ruleset**:
+
+1. Name `main`, enforcement status **Active**, empty bypass list.
+2. Target branches: **Add target > Include default branch**.
+3. Rules: **Restrict deletions**, **Block force pushes**, **Require a pull
+   request before merging** (required approvals `0` while there is one
+   maintainer), and **Require status checks to pass** with the `check` check.
+4. **Create**.
+
+### Verify the settings
+
+```bash
+gh api repos/buildbase-app/mcp --jq '.security_and_analysis'
+```
+
+```bash
+gh api repos/buildbase-app/mcp/private-vulnerability-reporting
+```
+
+```bash
+gh api -i repos/buildbase-app/mcp/vulnerability-alerts | head -1
+```
+
+```bash
+gh api repos/buildbase-app/mcp/rulesets
+```
+
+Expect `secret_scanning` and `secret_scanning_push_protection` to be
+`enabled`, `{"enabled": true}`, `HTTP/2.0 204 No Content`, and a ruleset
+named `main`.
+
+### Publish
+
+Publish to the MCP Registry with section 6. A server under `app.buildbase/*`
+reuses the existing key and DNS record, so skip "First time only".
