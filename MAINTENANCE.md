@@ -174,44 +174,35 @@ delete the old record.
    mcp-publisher validate server.json
    ```
 
-3. Read the private key out of `key.pem`. This prints only its length, which
-   must be 64:
+3. Sign in and publish in one command. A registry login lasts only a few
+   minutes, so never leave a gap between the two. Publishing is the step that
+   cannot be undone.
 
    ```bash
-   PRIVATE_KEY="$(openssl pkey -in key.pem -noout -text | awk '/^priv:/{f=1;next} /^pub:/{f=0} f' | tr -d ' :\n')"; echo "length: ${#PRIVATE_KEY}"
+   cd ~/buildbase-mcp-registry && PRIVATE_KEY="$(openssl pkey -in key.pem -noout -text | awk '/^priv:/{f=1;next} /^pub:/{f=0} f' | tr -d ' :\n')" && { [ ${#PRIVATE_KEY} -eq 64 ] || { echo "key length is ${#PRIVATE_KEY}, expected 64"; false; }; } && mcp-publisher login dns --domain buildbase.app --private-key "$PRIVATE_KEY" && unset PRIVATE_KEY && mcp-publisher publish; unset PRIVATE_KEY
    ```
 
-4. Sign in with the DNS key, and clear the variable:
-
-   ```bash
-   mcp-publisher login dns --domain buildbase.app --private-key "$PRIVATE_KEY"; unset PRIVATE_KEY
-   ```
-
-   It should end with "Successfully logged in". A DNS or verification error
-   here means the record is not visible yet: wait 5 minutes and repeat steps 3
-   and 4.
-5. Publish. This is the step that cannot be undone:
-
-   ```bash
-   mcp-publisher publish
-   ```
-
-   If it fails with a network error, nothing was published: run it again. If
-   the login has expired by then, repeat steps 3 and 4 first.
-6. Verify:
+   It reads the key out of `key.pem` and stops unless it is 64 characters,
+   without printing it. It then signs in ("Successfully logged in"), clears
+   the key from the shell, and publishes. If any step fails, the ones after it
+   do not run, and the last `unset` clears the key anyway. On any error, look
+   it up in the table below, then run the whole command again.
+4. Verify:
 
    ```bash
    curl -s "https://registry.modelcontextprotocol.io/v0.1/servers?search=app.buildbase/console&version=latest"
    ```
 
-7. Record the listing in section 9 through a pull request.
+5. Record the listing in section 9 through a pull request.
 
 ### Errors we have seen
 
 | Error | Cause | Fix |
 | --- | --- | --- |
-| `invalid hex private key format: encoding/hex: invalid byte: U+0070 'p'` | The key was read with an older `grep -A3` command that also picked up the `pub:` line | Use the `awk` command in step 3 and check the length is 64 |
-| `TLS handshake timeout` on publish | A network problem on the way to the registry. Nothing was published | Run `mcp-publisher publish` again, on another network if it repeats |
+| `invalid hex private key format: encoding/hex: invalid byte: U+0070 'p'` | The key was read with an older `grep -A3` command that also picked up the `pub:` line | Use the command in step 3, which reads the key with `awk` and checks the length is 64 |
+| `TLS handshake timeout` on publish | A network problem on the way to the registry. Nothing was published | Run the step 3 command again, on another network or without a VPN if it repeats |
+| `401 ... Invalid or expired Registry JWT token ... token is expired` | The login is only valid for a few minutes, and too much time passed before `publish`. Nothing was published | Run the whole step 3 command again, so sign-in and publish happen together |
+| A DNS or verification error at sign-in | The TXT record is not visible yet | Wait 5 minutes and run the step 3 command again |
 
 ## 7. Security reports
 
@@ -234,7 +225,7 @@ delete the old record.
 
 | Marketplace | Listing URL | Date listed | Account used | Owner |
 | --- | --- | --- | --- | --- |
-| MCP Registry | not listed yet | | | |
+| MCP Registry | [app.buildbase/console](https://registry.modelcontextprotocol.io/v0.1/servers/app.buildbase%2Fconsole/versions/latest) | 2026-11-12 (version 1.0.0) | DNS sign-in for `buildbase.app` (key in the team password manager) | @dharmendra-buildbase |
 
 ## 10. Setting up a connector repository from scratch
 
