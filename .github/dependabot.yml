@@ -1,0 +1,19 @@
+# Keeps the GitHub Actions in .github/workflows up to date. The workflow pins
+# each action to a full commit SHA with the version in a comment; Dependabot
+# updates both. Its pull requests must pass the check workflow before merging.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    # Only offer a release once it is at least two weeks old.
+    cooldown:
+      default-days: 14
+    # One pull request a month for all actions, not one per action.
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "ci"
