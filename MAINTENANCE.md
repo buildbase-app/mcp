@@ -32,6 +32,12 @@ below. Re-read them monthly (section 4).
 | Lovable | `docs/clients/lovable.md` | [Custom MCP](https://docs.lovable.dev/integrations/custom-mcp) | 2026-11-12 | yes |
 | v0 | `docs/clients/v0.md` | [MCP Integrations](https://v0.app/docs/MCP) | 2026-11-12 | yes |
 | Raycast | `docs/clients/raycast.md` | [Model Context Protocol](https://manual.raycast.com/ai/model-context-protocol), [MCP Registry extension](https://www.raycast.com/raycast/model-context-protocol-registry) | 2026-11-12 | yes |
+| Windsurf (Devin Desktop) | `docs/clients/windsurf.md` | [Devin Local customizations](https://docs.devin.ai/desktop/devin-local/customizations), [Devin Local permissions](https://docs.devin.ai/desktop/devin-local/permissions), [Devin CLI MCP configuration](https://docs.devin.ai/cli/extensibility/mcp/configuration), [Devin Desktop FAQ](https://docs.devin.ai/desktop/devin-desktop-faq) | 2026-11-24 | yes |
+| Zed | `docs/clients/zed.md` | [Model Context Protocol](https://zed.dev/docs/ai/mcp), [Tool Permissions](https://zed.dev/docs/ai/tool-permissions) | 2026-11-24 | yes |
+| Junie | `docs/clients/junie.md` | [Add and configure MCP servers](https://junie.jetbrains.com/docs/junie-cli-mcp-configuration.html) | 2026-11-24 | yes |
+| Goose | `docs/clients/goose.md` | [Using extensions](https://goose-docs.ai/docs/getting-started/using-extensions) | 2026-11-24 | yes |
+| Bolt | `docs/clients/bolt.md` | [Connect to an MCP server](https://support.bolt.new/integrations/mcp) | 2026-11-24 | yes |
+| Replit | `docs/clients/replit.md` | [Connect via MCP](https://docs.replit.com/build/connect-via-mcp), [MCP servers and install links](https://docs.replit.com/features/mcp/overview) | 2026-11-24 | yes |
 | Any other client | `docs/clients/other.md` | [MCP authorization 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization) | 2026-11-12 | yes |
 | Dependabot | `.github/dependabot.yml` | [Dependabot options reference](https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference) | 2026-11-12 | yes |
 
@@ -52,6 +58,19 @@ Notes from the last read:
   browser.
 - Not yet tested end to end: sign-in from v0 and from the Cline editor
   extension.
+- Added 2026-11-24, from the platform docs' client pages re-checked against
+  each vendor's page: Windsurf, Zed, Junie, Goose, Bolt and Replit. Where the
+  vendor disagreed with the platform page the guide follows the vendor (Bolt:
+  the connector can be switched on per project; Replit: **Settings >
+  Integrations > Your integrations > Add custom**; Goose: the Desktop sidebar
+  path, and no fixed callback port is needed). None of the six sign-ins was
+  tested in the client.
+- Windsurf was renamed Devin Desktop on 2026-06-02 (vendor FAQ); its agent is
+  Devin Local. The guide keeps both names.
+- `scripts/check.mjs` decodes only `config=` install links, so it does not
+  check the endpoint inside the Replit `mcp=` link or the `goose://` link
+  written as text in `goose.md`. Re-check both by hand when the endpoint
+  changes.
 
 ## 3. When the server changes
 

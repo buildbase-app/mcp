@@ -22,6 +22,10 @@ every plugin manifest.
   AI tool it finds.
 - `llms-install.md` names the one-command setup (only with the person's
   go-ahead) and explains the scopes and the per-change approvals.
+- Client guides for Windsurf (Devin Desktop), Zed, Junie, Goose, Bolt and
+  Replit, each checked against the vendor's own page on 2026-11-24, linked
+  from the README and `llms-install.md`, with their sources in
+  `MAINTENANCE.md` section 2.
 
 - `MAINTENANCE.md` section 9 records the directory submissions made on
   2026-11-12 (Glama, LobeHub, Cline, GitHub MCP Registry, mcpservers.org,

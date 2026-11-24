@@ -97,9 +97,15 @@ codex mcp add buildbase --url https://api.console.buildbase.app/mcp
 gemini mcp add -s user --transport http buildbase https://api.console.buildbase.app/mcp
 ```
 
-**claude.ai, Claude Desktop, ChatGPT, Lovable, v0 and Raycast** are set up in
-their own settings screens. You cannot edit a file for them. Give the person
-the steps from the matching guide in [docs/clients](docs/clients/).
+**claude.ai, Claude Desktop, ChatGPT, Lovable, v0, Bolt, Replit and Raycast**
+are set up in their own settings screens. You cannot edit a file for them.
+Give the person the steps from the matching guide in
+[docs/clients](docs/clients/).
+
+**Windsurf (Devin Desktop), Zed, Junie and Goose** each have a config file or
+command of their own: follow the matching guide in
+[docs/clients](docs/clients/), and add the `buildbase` entry without touching
+other entries.
 
 **Any other client:** see [docs/clients/other.md](docs/clients/other.md).
 

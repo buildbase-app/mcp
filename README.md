@@ -140,6 +140,12 @@ Details: [the claimable organization](https://docs.buildbase.app/console/ai-agen
 | Lovable | [docs/clients/lovable.md](docs/clients/lovable.md) |
 | v0 | [docs/clients/v0.md](docs/clients/v0.md) |
 | Raycast | [docs/clients/raycast.md](docs/clients/raycast.md) |
+| Windsurf (Devin Desktop) | [docs/clients/windsurf.md](docs/clients/windsurf.md) |
+| Zed | [docs/clients/zed.md](docs/clients/zed.md) |
+| Junie (JetBrains) | [docs/clients/junie.md](docs/clients/junie.md) |
+| Goose | [docs/clients/goose.md](docs/clients/goose.md) |
+| Bolt | [docs/clients/bolt.md](docs/clients/bolt.md) |
+| Replit | [docs/clients/replit.md](docs/clients/replit.md) |
 | Any other client | [docs/clients/other.md](docs/clients/other.md) |
 
 AI agents installing the server for someone can follow
