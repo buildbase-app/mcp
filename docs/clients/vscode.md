@@ -71,8 +71,10 @@ In Copilot chat, ask:
 - On Copilot Business or Copilot Enterprise, the organization's
   "MCP servers in Copilot" policy must be on. It is off by default.
 - Admins can limit MCP to registry servers or an allowlist.
-- If the agent says agent access is off, an owner or admin of that BuildBase
-  organization turns it on in **Console > Account > Security**.
+- If the agent says the organization does not let agents in, an owner or
+  admin of that organization changes its **AI agents** setting in the console,
+  under **Security**. Under **Read only** (the default) agents can read but
+  not change anything.
 
 ---
 

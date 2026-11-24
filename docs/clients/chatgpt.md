@@ -40,8 +40,10 @@ and pick BuildBase.
 - Use ChatGPT on the web to add the server.
 - After the server changes, open it at chatgpt.com/plugins and select
   **Refresh**.
-- If the agent says agent access is off, an owner or admin of that organization
-  turns it on in **Console > Account > Security**.
+- If the agent says the organization does not let agents in, an owner or
+  admin of that organization changes its **AI agents** setting in the console,
+  under **Security**. Under **Read only** (the default) agents can read but
+  not change anything.
 
 ---
 

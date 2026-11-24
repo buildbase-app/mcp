@@ -42,8 +42,10 @@ In AI Chat, mention the BuildBase server and ask:
 - Raycast approves read-only tools automatically and asks before the others.
   BuildBase also asks for approval in the chat before deleting things, changing
   members or roles, moving money or changing sign-in settings.
-- If the agent says agent access is off, an owner or admin of that organization
-  turns it on in **Console > Account > Security**.
+- If the agent says the organization does not let agents in, an owner or
+  admin of that organization changes its **AI agents** setting in the console,
+  under **Security**. Under **Read only** (the default) agents can read but
+  not change anything.
 
 ---
 

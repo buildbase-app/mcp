@@ -49,8 +49,10 @@ your BuildBase account and approve the access request.
 - Cline's current docs describe OAuth sign-in for the Cline CLI. They do not
   say how the editor extension signs in to remote servers. If the extension
   cannot sign in, use the CLI or another client.
-- If the agent says agent access is off, an owner or admin of that organization
-  turns it on in **Console > Account > Security**.
+- If the agent says the organization does not let agents in, an owner or
+  admin of that organization changes its **AI agents** setting in the console,
+  under **Security**. Under **Read only** (the default) agents can read but
+  not change anything.
 
 ---
 

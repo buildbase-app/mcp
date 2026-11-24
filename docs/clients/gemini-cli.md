@@ -44,8 +44,10 @@ approve the access request. To sign in again, run `/mcp auth buildbase`.
 
 - Sign-in needs a browser on the same machine. It does not work over SSH
   without a display, or in a container without a browser.
-- If the agent says agent access is off, an owner or admin of that organization
-  turns it on in **Console > Account > Security**.
+- If the agent says the organization does not let agents in, an owner or
+  admin of that organization changes its **AI agents** setting in the console,
+  under **Security**. Under **Read only** (the default) agents can read but
+  not change anything.
 
 ---
 
