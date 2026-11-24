@@ -17,11 +17,19 @@ hosted MCP server. There is nothing to clone, build, install or run.
 - If a config file already exists, add the `buildbase` entry to it. Do not
   remove or change other entries.
 - Do not run any package or script from this repository. Only edit the
-  client's config, or run the client's own command shown below.
+  client's config, or run the client's own command shown below. The one
+  exception is BuildBase's own setup command in Step 1, and only when the
+  person asks for it.
 
 ## Step 1: find the client
 
 Work out which client the person is using. If you are not sure, ask them.
+
+If the person has Node.js and asks you to set up every AI tool on their
+computer at once, `npx @buildbase/sdk agent setup --console` does it: it
+shows its plan, edits each tool's config in their home folder only after a
+yes, and names the server `buildbase-console`. Run it only with their go-ahead,
+and show them the plan first with `--dry-run`.
 
 ## Step 2: add the server
 
@@ -89,9 +97,15 @@ codex mcp add buildbase --url https://api.console.buildbase.app/mcp
 gemini mcp add -s user --transport http buildbase https://api.console.buildbase.app/mcp
 ```
 
-**claude.ai, Claude Desktop, ChatGPT, Lovable, v0 and Raycast** are set up in
-their own settings screens. You cannot edit a file for them. Give the person
-the steps from the matching guide in [docs/clients](docs/clients/).
+**claude.ai, Claude Desktop, ChatGPT, Lovable, v0, Bolt, Replit and Raycast**
+are set up in their own settings screens. You cannot edit a file for them.
+Give the person the steps from the matching guide in
+[docs/clients](docs/clients/).
+
+**Windsurf (Devin Desktop), Zed, Junie and Goose** each have a config file or
+command of their own: follow the matching guide in
+[docs/clients](docs/clients/), and add the `buildbase` entry without touching
+other entries.
 
 **Any other client:** see [docs/clients/other.md](docs/clients/other.md).
 
@@ -114,9 +128,18 @@ You never see their password.
 ## Step 4: ask the person to check agent access
 
 Each BuildBase organization decides whether AI agents may use it. Owners and
-admins set this in **Console > Account > Security**: off, read only (the
-default) or read and write. If a tool says agent access is off, the person
-needs an owner or admin of that organization to turn it on.
+admins set this in the console under **Security** (the avatar menu), **AI
+agents**: **Off**, **Read only** (the default) or **Read and change**. If a
+tool says the organization does not let agents in, the person needs an owner
+or admin of that organization to change it. Under **Read only**, every change
+is refused even though the connection holds `console:write`.
+
+The connection starts with the `console:read` and `console:write` scopes. When
+a task needs `console:export` or `console:destructive`, the server answers
+`insufficient_scope` and the client asks the person to approve that scope.
+Deleting, sending, member, role and webhook changes, money and real workflow
+runs also wait for the person's approval of that one change. Never approve or
+confirm one for them.
 
 ## Step 5: check it works
 

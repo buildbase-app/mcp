@@ -10,8 +10,12 @@ the desktop app.
 2. Select **Add**, then **Add custom connector**.
 3. Enter the name `BuildBase` and the URL `https://api.console.buildbase.app/mcp`,
    then select **Continue**.
-4. Keep the authentication options marked **Detected**. If you are asked to
-   choose an OAuth client, choose **Register automatically**.
+4. Keep the authentication options marked **Detected**. Under **OAuth client**,
+   choose **Register automatically**. BuildBase's authorization server takes
+   clients that register themselves, not Claude's published identity, so
+   **Use Claude's published identity** fails: the sign-in stops before the
+   BuildBase page opens. If that happened, remove the connector and add it
+   again with **Register automatically**.
 5. Select **Add**, then **Connect**.
 
 Or open this link to fill in the name and URL for you:
@@ -68,8 +72,10 @@ Ask Claude:
 
 - Claude Desktop adds remote servers through **Connectors**. Its
   `claude_desktop_config.json` file is for local servers.
-- If the agent says agent access is off, an owner or admin of that organization
-  turns it on in **Console > Account > Security**.
+- If the agent says the organization does not let agents in, an owner or
+  admin of that organization changes its **AI agents** setting in the console,
+  under **Security**. Under **Read only** (the default) agents can read but
+  not change anything.
 
 ---
 

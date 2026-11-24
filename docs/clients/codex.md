@@ -47,8 +47,10 @@ Start Codex and ask:
 
 - You can choose when Codex asks before running a tool with
   `default_tools_approval_mode` in the server's config section.
-- If the agent says agent access is off, an owner or admin of that organization
-  turns it on in **Console > Account > Security**.
+- If the agent says the organization does not let agents in, an owner or
+  admin of that organization changes its **AI agents** setting in the console,
+  under **Security**. Under **Read only** (the default) agents can read but
+  not change anything.
 
 ---
 

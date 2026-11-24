@@ -43,8 +43,10 @@ If something fails, open the Output panel and choose **MCP Logs**.
 
 - Cloud Agents keep their own MCP sign-ins, separate from the desktop app.
 - Enterprise admins can limit which remote MCP servers are allowed.
-- If the agent says agent access is off, an owner or admin of that organization
-  turns it on in **Console > Account > Security**.
+- If the agent says the organization does not let agents in, an owner or
+  admin of that organization changes its **AI agents** setting in the console,
+  under **Security**. Under **Read only** (the default) agents can read but
+  not change anything.
 
 ---
 

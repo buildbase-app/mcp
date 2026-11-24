@@ -12,9 +12,24 @@ https://api.console.buildbase.app/mcp
 ```
 
 Streamable HTTP. Sign in with your BuildBase account (OAuth). Nothing to
-install, no API key.
+install, no API key. (A job with nobody to sign in can use an organization API
+key instead: see [Connect with an API key](#connect-with-an-api-key).)
 
 ## Quick start
+
+**Every AI tool on your computer, one command** (needs Node.js and
+`@buildbase/sdk` 1.4.0 or later, which `npx` fetches):
+
+```bash
+npx @buildbase/sdk agent setup --console
+```
+
+It finds Claude Code, Cursor, VS Code, Codex, Windsurf, Gemini CLI, Goose and
+Zed, shows what it will change, and after you confirm writes each tool's own
+entry, named `buildbase-console`. It never removes or changes another server
+and backs up each file first. `--dry-run` prints the plan and writes nothing;
+`--only cursor,codex` picks tools. Each tool still signs you in with OAuth the
+first time. Or add it by hand:
 
 **Claude Code**
 
@@ -44,24 +59,72 @@ browser, you sign in and approve. Guides for other clients are in
 
 ## What it can do
 
+The server lists 20 tools.
+
 | Group | Tools | Purpose |
 | --- | --- | --- |
-| Account | `whoami`, `list_orgs`, `open_org` | Who you are, your organizations, pick one |
+| Account | `whoami`, `list_orgs`, `open_org` | Who you are, your organizations and your role in each, pick an organization and environment |
 | Console reads | `console_catalog`, `console_get` | Discover and read console data |
-| Console changes | `console_write`, `console_destructive_change` | Change data; destructive changes need approval |
-| New organization | `create_org`, `claim_link` | Create an organization, get a claim link |
-| Blueprints | `blueprint_schema`, `blueprint_validate`, `blueprint_plan`, `blueprint_export`, `blueprint_apply` | Describe an org setup as a file, check it, plan it, apply it |
-| Developer help | `search_docs`, `fetch_doc`, `get_env_template` | Docs search and env templates for building with the SDK |
-| Exports | `start_export`, `get_export_status` | Export data |
+| Console changes | `console_write`, `console_destructive_change` | Create and change things; deletes, sends, member, role and webhook changes, money and real workflow runs need your approval |
+| New organization | `create_org`, `claim_link` | Create an organization you own (with your approval); a claim link for one an agent created with no account |
+| Blueprints | `blueprint_schema`, `blueprint_validate`, `blueprint_plan`, `blueprint_export`, `blueprint_apply` | Describe an organization's setup as a file, check it, plan it, apply the plan you were shown (owners and admins) |
+| Developer help | `search_docs`, `fetch_doc`, `get_api_operation`, `get_env_template` | Search and read the BuildBase docs, the exact contract of one HTTP API operation, the environment variables an app needs |
+| Exports | `start_export`, `get_export_status` | Export your audience and read the rows |
 
 ## Access and safety
 
-Agent access is set per organization by its owners and admins in
-**Console > Account > Security**: off, read only (the default) or read and
-write. The agent acts as the signed-in person, within that person's role.
-Deleting things, changing members or roles, moving money and changing sign-in
-settings ask for the person's approval in the chat first. Secrets are never
-returned to the agent.
+- **Each organization decides.** Owners and admins choose in the console under
+  **Security** (your avatar menu), **AI agents**: **Off**, **Read only** (the
+  default) or **Read and change**. The setting applies to every agent at once.
+- **The agent acts as you**, within your role in that organization. It never
+  receives a secret, even one it creates, and it cannot change sign-in
+  settings, credentials or the billing catalog.
+- **Scopes.** A tool asks for `console:read` and `console:write` when it
+  connects. `console:export` (lists of people, audience exports) and
+  `console:destructive` are asked for only when a task needs one; the server
+  answers `insufficient_scope` and your tool asks you to approve that scope.
+- **Approvals.** Deleting, sending to an audience, changing members, roles or
+  webhooks, moving money and running a workflow for real each wait for your
+  approval of that one change.
+- **You stay in control.** Every change is in the organization's audit log.
+  In **Security**, owners and admins can block any member's agent and members
+  can block their own; you can disconnect an agent at any time under
+  **Security**, **Connected AI agents**.
+
+## Connect with an API key
+
+A job with nobody to sign in, such as CI or a scheduled script, can send one of
+the organization's API keys as the bearer to the same endpoint. For example,
+with Claude Code:
+
+```bash
+claude mcp add --transport http buildbase https://api.console.buildbase.app/mcp \
+  --header "Authorization: Bearer $BUILDBASE_API_KEY"
+```
+
+The key works only in its own organization (or the environment it was issued
+for), within its role, and the organization's **AI agents** setting still
+applies. Keep the key in an environment variable or your CI's secret store,
+never in a file you commit or a chat.
+
+## An agent with no account
+
+A coding agent can start before the person has a BuildBase account: it creates
+a claimable organization and works in it with that organization's API key,
+and the person claims it later. In an app, `npx @buildbase/sdk init --claim --yes`
+does this and writes the keys to the app's local environment file. The agent
+instructions are at [www.buildbase.app/auth.md](https://www.buildbase.app/auth.md).
+
+- The agent gets an API key, a claim link and a claim code, once. The code
+  lasts 15 minutes; `claim_link` gives a fresh one.
+- Only a person can claim: they open the link, sign in or sign up, and type the
+  code. The agent's key then stops working; connect the agent again as
+  yourself.
+- Until it is claimed the organization runs on low caps (sign-in and
+  verification email only, no invitations, Stripe test keys), and it is deleted
+  72 hours after it was created.
+
+Details: [the claimable organization](https://docs.buildbase.app/console/ai-agents#an-agent-with-no-account-the-claimable-organization).
 
 ## Clients
 
@@ -77,6 +140,12 @@ returned to the agent.
 | Lovable | [docs/clients/lovable.md](docs/clients/lovable.md) |
 | v0 | [docs/clients/v0.md](docs/clients/v0.md) |
 | Raycast | [docs/clients/raycast.md](docs/clients/raycast.md) |
+| Windsurf (Devin Desktop) | [docs/clients/windsurf.md](docs/clients/windsurf.md) |
+| Zed | [docs/clients/zed.md](docs/clients/zed.md) |
+| Junie (JetBrains) | [docs/clients/junie.md](docs/clients/junie.md) |
+| Goose | [docs/clients/goose.md](docs/clients/goose.md) |
+| Bolt | [docs/clients/bolt.md](docs/clients/bolt.md) |
+| Replit | [docs/clients/replit.md](docs/clients/replit.md) |
 | Any other client | [docs/clients/other.md](docs/clients/other.md) |
 
 AI agents installing the server for someone can follow
@@ -87,12 +156,19 @@ AI agents installing the server for someone can follow
 - **401 or "unauthorized":** sign in again. In Claude Code run `/mcp`, in
   Codex `codex mcp login buildbase`, in Gemini CLI `/mcp auth buildbase`. Other
   clients have a sign-in or authenticate action on the server.
-- **"Agent access is off":** an owner or admin of that organization turns it
-  on in **Console > Account > Security**.
-- **The agent can read but not change anything:** the organization allows
-  read only. An owner or admin can switch it to read and write.
-- **A tool is refused for your role:** the agent can do only what your role
-  in that organization allows.
+- **The organization does not let agents in:** its **AI agents** setting is
+  **Off**, or your agent is blocked there. An owner or admin changes it under
+  **Security**, **AI agents**.
+- **The agent can read but not change anything:** the organization is set to
+  **Read only**, or you did not grant `console:write`. An owner or admin can
+  choose **Read and change**; then approve `console:write` when the tool asks.
+- **A tool is refused for your role, or asks for the same scope again and
+  again:** the agent can do only what your role in that organization allows,
+  and approving a scope cannot get past your role or the organization's
+  setting. Do it in the console, or ask an owner or admin.
+- **Claude's sign-in fails before the BuildBase page opens:** the custom
+  connector's **OAuth client** is set to Claude's published identity. Remove it
+  and add it again with **Register automatically** ([Claude guide](docs/clients/claude.md)).
 - **The client cannot sign in:** the client must support OAuth for remote
   servers. These cannot connect directly:
   - Claude Desktop's `claude_desktop_config.json`, which is for local servers.
